@@ -4,7 +4,7 @@
 
 if [ $1 == '--help' ];
 then
-	echo '############ Help Secction ############ '
+	echo '############ Help Section ############ '
 	echo " first argument is for targegt "
 	echo " second argument is for ad_name "
 	echo " third argument is for ad_user "
