@@ -15,7 +15,6 @@ fi
 # INIT Function
 function download_share_content {
   smbclient \\\\$target\\$share $([ -n "$user" ] && echo "--user=${user}" || echo "-N") -c "ls" | while read line;
-  #smbclient \\\\$target\\$share --user="${user}" -c "ls" | while read line;
   do
 	echo $line | grep -q -E 'anony.*|\. |\.\.'
 	command_result=$?
@@ -29,9 +28,7 @@ function download_share_content {
 	type=$(echo "$line" | awk '{print $2}')
 
 	if [[ "$type" == "D" ]]; then
-		#smbclient \\\\$target\\$share -N -c "prompt OFF;recurse ON;mget *"
 		smbclient \\\\$target\\$share $([ -n "$user" ] && echo "--user=${user}" || echo "-N") -c "prompt OFF;recurse ON;mget *"
-		#smbclient \\\\$target\\$share --user="${user}" -c "prompt OFF;recurse ON;mget *"
 	fi
   done
 }
@@ -59,7 +56,6 @@ desc_path='/tmp'
 echo "[Config] traget is ${target}"
 
 shares=$(smbclient -L \\\\$target\\ $([ -n "$user" ] && echo "--user=${user}" || echo "-N") | grep -E '^[[:space:]]+[A-Za-z0-9_]+' | grep -v 'Sharename' | awk '{print $1}')
-#shares=$(smbclient -L \\\\$target\\ --user="${user}" | grep -E '^[[:space:]]+[A-Za-z0-9_]+' | grep -v 'Sharename' | awk '{print $1}')
 command_result=$?
 
 # ist die list leer?
@@ -81,9 +77,7 @@ done
 echo '[share query]:'
 for share in $shares;
 do
-	#query=$(smbclient \\\\$target\\$share -N -c "ls")
 	query=$(smbclient -L \\\\$target\\$share $([ -n "$user" ] && echo "--user=${user}" || echo "-N") -c "ls")
-	#query=$(smbclient \\\\$target\\$share --user="${user}" -c "ls")
 	command_result=$?
 
 	if [ $command_result -eq 0 ];
